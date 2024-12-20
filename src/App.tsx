@@ -1,6 +1,22 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import Konva from "konva";
+import ExampleAd from './correct-path-to-example-ad';
+import { KonvaImage } from 'react-konva';
+
+
+
+const ExampleAd = () => <div>Example Ad</div>;
+type KonvaImage = Konva.Image;
+interface ExampleAdProps {
+  productImage: string;
+}
+
+const ExampleAd: React.FC<ExampleAdProps> = ({ productImage }) => {
+  return <img src={productImage} alt="Product" />;
+};
+
 
 const App: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -47,6 +63,20 @@ const App: React.FC = () => {
     }
   };
 
+  const handleDownload = () => {
+    if (preview) {
+      const link = document.createElement("a");
+      link.href = preview; // The URL of the processed image
+      link.download = "processed-image.png"; // Default filename
+      link.click();
+    } else {
+      alert("No image to download!");
+    }
+  };
+
+  
+  
+
   return (
     <Container>
       <h1>Facebook Ad Creator</h1>
@@ -59,7 +89,10 @@ const App: React.FC = () => {
           onChange={handleImageUpload}
         />
         {preview && <PreviewImage src={preview} alt="Uploaded preview" />}
+        {preview && <ExampleAd productImage={preview} />}
         <button onClick={handleBackgroundRemoval}>Remove Background</button>
+        <button onClick={handleDownload} disabled={!preview}>Download Image</button>
+        <KonvaImage src="/path/to/image.png" />
       </UploadSection>
     </Container>
   );
@@ -112,4 +145,5 @@ const PreviewImage = styled.img`
   border: 2px solid #ddd;
   border-radius: 5px;
 `;
+
 
